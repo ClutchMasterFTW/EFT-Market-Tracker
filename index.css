@@ -23,6 +23,47 @@ header, footer {
     padding: 20px;
 }
 
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#login {
+    cursor: pointer;
+    position: relative;
+    width: 36px;
+    height: 34px;
+}
+
+#login img {
+    filter: invert(99%) sepia(33%) saturate(1469%) hue-rotate(298deg) brightness(108%) contrast(96%);
+}
+
+#login:hover::after {
+    content: 'LOGIN';
+    visibility: visible;
+    pointer-events: all;
+    opacity: 100%;
+    bottom: -14px;
+}
+
+#login::after {
+    content: 'LOGIN';
+    user-select: none;
+    pointer-events: none;
+    font-size: 15px;
+    color: var(--color-scheme-text-color);
+    left: 50%;
+    opacity: 0%;
+    visibility: hidden;
+    transform: translateX(-50%);
+    position: absolute;
+    bottom: -30px;
+    transition: opacity 0.35s ease-in-out, bottom 0.35s ease-in-out, visibility 0.35s ease-in-out;
+}
+
 hr {
     border-top: 3px rgb(41, 40, 22) solid;
 }
@@ -32,9 +73,11 @@ a {
 }
 
 #content {
-    width: 80%;
+    width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: center;
     flex-wrap: wrap;
     gap: 5px;
 }
@@ -43,13 +86,41 @@ a {
     margin: 15px;
 }
 
+#legend-section {
+    width: 95%;
+    background-color: rgb(27, 22, 15);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 100px;
+    margin-bottom: 5px;
+}
+
 .item-container {
     padding: 0;
     margin: 0;
-    width: 64px;
-    height: 64px;
+    width: 95%;
+    height: 100px;
+    background-color: rgb(27, 22, 15);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .item-icon {
+    width: 80px;
+    height: 80px;
+    margin-left: 10px;
     cursor: pointer;
+}
+
+.item-short-name {
+    position: absolute;
+    right: -7.5px;
+    top: 1px;
+    font-size: 9.5px;
+    user-select: none;
+    pointer-events: none;
 }

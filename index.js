@@ -1,4 +1,6 @@
 let items;
+if(localStorage.getItem("maxItemsToLoad") == (undefined || null)) localStorage.setItem("maxItemsToLoad", 50);
+let maxItemsToLoad = parseInt(localStorage.getItem("maxItemsToLoad"));
 let showing = 0;
 
 fetch('https://api.tarkov.dev/graphql', {
@@ -38,15 +40,18 @@ fetch('https://api.tarkov.dev/graphql', {
 
 function constructDataIntoHTML() {
 	let content = $("#content");
-	for(i = 0; i < items.length; i++) {
+	for(i = 0; i < maxItemsToLoad; i++) {
 		let container = $("<div class='item-container'></div>");
-		let image = $("<img src='" + items[i].iconLink + "' class='item-icon' title='" + items[i].name + "'>");
+		let image = $("<div style='position: relative; width: 80px; height: 80px;'><img src='" + items[i].iconLink + "' class='item-icon' title='" + items[i].name + "'></div>");
+		let shortName = $("<p class='item-short-name'>" + items[i].shortName + "</p>");
+		let name = $("<p class='item-name'>" + items[i].name + "</p>");
+		let fleaPrice;
 
-		content.append(container.append(image));
+		content.append(container.append(image.append(shortName)));
 		showing++;
 		//There will be an issue when the search feature is implemented with "items" being plural when there is only 1 item found in a query
 		$("#showing").html("<u>Showing <b>" + numberWithCommas(showing) + "</b> items</u>");
-		// console.log(items[i]);
+		console.log(items[i]);
 	};
 }
 
