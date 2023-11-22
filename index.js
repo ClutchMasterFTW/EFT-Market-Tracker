@@ -40,14 +40,22 @@ fetch('https://api.tarkov.dev/graphql', {
 
 function constructDataIntoHTML() {
 	let content = $("#content");
+	//Remove loading text
+	$("#legend-section").css("visibility", "visible");
+	content.html("");
 	for(i = 0; i < maxItemsToLoad; i++) {
 		let container = $("<div class='item-container'></div>");
 		let image = $("<div style='position: relative; width: 80px; height: 80px;'><img src='" + items[i].iconLink + "' class='item-icon' title='" + items[i].name + "'></div>");
 		let shortName = $("<p class='item-short-name'>" + items[i].shortName + "</p>");
 		let name = $("<p class='item-name'>" + items[i].name + "</p>");
-		let fleaPrice;
+		let fleaPrice = $("<p class='item-flea-price'>Not Sellable</p>");
+		for(j = 0; j < items[i].sellFor.length; j++) {
+			if(items[i].sellFor[j].source == "fleaMarket") {
+				fleaPrice.html(numberWithCommas(items[i].sellFor[j].price) + "₽");
+			}
+		}
 
-		content.append(container.append(image.append(shortName)));
+		content.append(container.append(image.append(shortName)).append(name).append(fleaPrice));
 		showing++;
 		//There will be an issue when the search feature is implemented with "items" being plural when there is only 1 item found in a query
 		$("#showing").html("<u>Showing <b>" + numberWithCommas(showing) + "</b> items</u>");
