@@ -50,12 +50,21 @@ function constructDataIntoHTML() {
 		let name = $("<p class='item-name'>" + items[i].name + "</p>");
 		let fleaPrice = $("<p class='item-flea-price'>Not Sellable</p>");
 		for(j = 0; j < items[i].sellFor.length; j++) {
-			if(items[i].sellFor[j].source == "fleaMarket") {
-				fleaPrice.html(numberWithCommas(items[i].sellFor[j].price) + "₽");
+			if(items[i].sellFor[j].source == "fleaMarket") fleaPrice.html(numberWithCommas(items[i].sellFor[j].price) + "₽");
+		}
+		//Price, Index of person
+		let bestResult = [0, 0];
+		for(j = 0; j < items[i].sellFor.length; j++) {
+			if(items[i].sellFor[j].price > bestResult[0]) {
+				bestResult[0] = items[i].sellFor[j].price;
+				bestResult[1] = items[i].sellFor[j].source;
 			}
 		}
+		let pricePerSlot = $("<div class='item-price-per-slot-container'>\
+							  	<p class='item-price-per-slot'>" + calculatePricePerSlot(bestResult[0], items[i].width, items[i].height) + "</p>\
+							  </div>");
 
-		content.append(container.append(image.append(shortName)).append(name).append(fleaPrice));
+		content.append(container.append(image.append(shortName)).append(name).append(fleaPrice).append(pricePerSlot));
 		showing++;
 		//There will be an issue when the search feature is implemented with "items" being plural when there is only 1 item found in a query
 		$("#showing").html("<u>Showing <b>" + numberWithCommas(showing) + "</b> items</u>");
@@ -65,4 +74,9 @@ function constructDataIntoHTML() {
 
 function numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function calculatePricePerSlot(price, width, height) {
+	let slotSize = width * height;
+	return numberWithCommas(Math.floor(price / slotSize));
 }

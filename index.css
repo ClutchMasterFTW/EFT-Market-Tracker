@@ -138,7 +138,6 @@ a {
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    gap: 100px;
     margin-bottom: 5px;
     position: relative;
     left: 50%;
@@ -149,6 +148,7 @@ a {
 .legend:hover {
     text-decoration: underline;
     cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .item-container {
@@ -188,5 +188,5 @@ a {
 
 .item-flea-price {
     font-size: 20px;
-    margin-left: 20px;
+    width: 150px;
 }
