@@ -21,7 +21,16 @@
     </header>
     <hr class="divider">
     <br>
-    <h3 id="showing"><u>Showing <b>0</b> items</u></h3>
+    <div class="update-container">
+        <h3 id="showing"><u>Showing <b>0</b> items</u></h3>
+        <h3 id="last-updated">Last updated <b>now</b>.</h3>
+    </div>
+    <div class="user-input-container">
+        <div class="search-container">
+            <input id="search" type="text" placeholder="Search an item...">
+            <div id="search-submit" onclick="search()">Submit</div>
+        </div>
+    </div>
     <br>
     <div id="legend-section">
         <div class="legend" style="margin-left: 105px; width: 50%;">Name</div>
@@ -39,7 +48,7 @@
     <hr class="divider">
     <footer>
         <p>Created by ClutchMasterFTW | 2023©</p>
-        <p>Version <b>0.04</b> | Data retrieved from a <a href="https://github.com/the-hideout/tarkov-api" target="_blank">community made API</a>.</p>
+        <p>Version <b>0.05</b> | Data retrieved from a <a href="https://github.com/the-hideout/tarkov-api" target="_blank">community made API</a>.</p>
     </footer>
 
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>

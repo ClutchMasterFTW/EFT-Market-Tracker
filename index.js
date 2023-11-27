@@ -3,7 +3,8 @@ if(localStorage.getItem("maxItemsToLoad") == (undefined || null)) localStorage.s
 let maxItemsToLoad = parseInt(localStorage.getItem("maxItemsToLoad"));
 let showing = 0;
 
-fetch('https://api.tarkov.dev/graphql', {
+function fetchData() {
+	fetch('https://api.tarkov.dev/graphql', {
 	method: 'POST',
 	headers: {
 		'Content-Type': 'application/json',
@@ -29,14 +30,17 @@ fetch('https://api.tarkov.dev/graphql', {
 				updated
 			}
 		}`})
-})
+	})
 	.then(r => r.json())
 	// .then(data => console.log('data returned:', data))
 	.then(data => {
 		items = data.data.items;
 		constructDataIntoHTML();
 		// console.log(items[0])
-	});
+	})
+	.then($("#last-updated").html("Last updated <b>now</b>."));
+}
+fetchData();
 
 function constructDataIntoHTML() {
 	let content = $("#content");
@@ -70,6 +74,44 @@ function constructDataIntoHTML() {
 		$("#showing").html("<u>Showing <b>" + numberWithCommas(showing) + "</b> items</u>");
 		console.log(items[i]);
 	};
+
+	let seconds = 0;
+	let lastUpdatedHTML = $("#last-updated");
+	lastUpdated = setInterval(function() {
+		seconds++;
+
+		switch(seconds >= 5) {
+			case seconds >= 300:
+				lastUpdatedHTML.html("Last updated <b>>5 minutes</b> ago.");
+				break;
+			case seconds >= 240:
+				lastUpdatedHTML.html("Last updated <b>4 minutes</b> ago.");
+				break;
+			case seconds >= 180:
+				lastUpdatedHTML.html("Last updated <b>3 minutes</b> ago.");
+				break;
+			case seconds >= 120:
+				lastUpdatedHTML.html("Last updated <b>2 minutes</b> ago.");
+				break;
+			case seconds >= 60:
+				lastUpdatedHTML.html("Last updated <b>a minute</b> ago.");
+				break;
+			case seconds >= 30:
+				lastUpdatedHTML.html("Last updated <b>30 seconds</b> ago.");
+				break;
+			case seconds >= 20:
+				lastUpdatedHTML.html("Last updated <b>20 seconds</b> ago.");
+				break;
+			case seconds >= 15:
+				lastUpdatedHTML.html("Last updated <b>15 seconds</b> ago.");
+				break;
+			case seconds >= 10:
+				lastUpdatedHTML.html("Last updated <b>10 seconds</b> ago.");
+				break;
+			case seconds >= 5:
+				lastUpdatedHTML.html("Last updated <b>5 seconds</b> ago.");
+		}
+	}, 1000);
 }
 
 function numberWithCommas(x) {
@@ -79,4 +121,9 @@ function numberWithCommas(x) {
 function calculatePricePerSlot(price, width, height) {
 	let slotSize = width * height;
 	return numberWithCommas(Math.floor(price / slotSize));
+}
+
+function update() {
+	clearInterval(lastUpdated);
+	fetchData();
 }
