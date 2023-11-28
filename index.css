@@ -159,7 +159,7 @@ a {
     color: var(--color-scheme-text-color);
 }
 
-#search-submit {
+#search-submit, #load-more {
     color: var(--color-scheme-text-color);
     transition: color 0.5s ease;
     background: none;
@@ -173,6 +173,7 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+    z-index: 2;
 }
 
 #search-submit:hover {
@@ -180,7 +181,7 @@ a {
 }
 
 #search-submit::after, #load-more::after {
-    content: 'THIS IS A TEST';
+    content: '';
     background-color: var(--color-scheme-text-color);
     position: absolute;
     width: 150px;
@@ -190,6 +191,7 @@ a {
     margin-right: 0px;
     pointer-events: none;
     user-select: none;
+    z-index: 2;
 }
 
 #search-submit:hover::after, #load-more:hover::after {

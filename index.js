@@ -1,7 +1,11 @@
 let items;
-if(localStorage.getItem("maxItemsToLoad") == (undefined || null)) localStorage.setItem("maxItemsToLoad", 50);
+if(localStorage.getItem("maxItemsToLoad") == undefined || localStorage.getItem("maxItemsToLoad") == null) localStorage.setItem("maxItemsToLoad", 50);
 let maxItemsToLoad = parseInt(localStorage.getItem("maxItemsToLoad"));
+maxItemsToLoad = 3100;
 let showing = 0;
+
+//Additional Global Variables
+let USDtoRubble = 0;
 
 function fetchData() {
 	fetch('https://api.tarkov.dev/graphql', {
@@ -43,6 +47,10 @@ function fetchData() {
 fetchData();
 
 function constructDataIntoHTML() {
+	//Set price of USD (converted in rubles)
+	USDtoRubble = items[128].basePrice;
+	// console.log(USDtoRubble);
+
 	let content = $("#content");
 	//Remove loading text
 	$("#legend-section").css("visibility", "visible");
@@ -58,15 +66,32 @@ function constructDataIntoHTML() {
 		}
 		//Price, Index of person
 		let bestResult = [0, 0];
+		let peacekeeperRate;
 		for(j = 0; j < items[i].sellFor.length; j++) {
 			if(items[i].sellFor[j].price > bestResult[0]) {
 				bestResult[0] = items[i].sellFor[j].price;
 				bestResult[1] = items[i].sellFor[j].source;
 			}
+			if(items[i].sellFor[j].source == "peacekeeper") {
+				peacekeeperRate = items[i].sellFor[j].price;
+			}
+		}
+		//Check if peacekeeper has a better deal (by converting US dollars to rubbles, then comparing)
+		if(peacekeeperRate != null || peacekeeperRate != undefined) {
+			if(peacekeeperRate * USDtoRubble > bestResult[0]) {
+				bestResult[0] = peacekeeperRate;
+				bestResult[1] = "peacekeeper";
+			}
 		}
 		let pricePerSlot = $("<div class='item-price-per-slot-container'>\
-							  	<p class='item-price-per-slot'>" + calculatePricePerSlot(bestResult[0], items[i].width, items[i].height) + "</p>\
+							  	  <p class='item-price-per-slot'>Not sellable</p>\
 							  </div>");
+		if(bestResult[0] != 0) {
+			pricePerSlot = $("<div class='item-price-per-slot-container'>\
+							  	  <p class='item-price-per-slot'>" + (bestResult[1] != "peacekeeper" ? "" : "<div style='color: #74b975'>$</div>") + calculatePricePerSlot(bestResult[0], items[i].width, items[i].height) + (bestResult[1] != "peacekeeper" ? "₽" : "") + "</p>\
+							  </div>");
+							  console.log("bestresult:" + bestResult[1]);
+		}
 
 		content.append(container.append(image.append(shortName)).append(name).append(fleaPrice).append(pricePerSlot));
 		showing++;
